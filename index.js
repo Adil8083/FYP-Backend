@@ -1,66 +1,36 @@
-const createError = require("http-errors");
 const express = require("express");
-const mongoos = require("mongoose");
-const cors = require("cors");
-const cookiesParser = require("cookie-parser");
-// const winston = require("winston");
-mongoos.set("useFindAndModify", false);
+const mongoose = require("mongoose");
+const config = require("config");
+const app = express();
 
-// var routesUser = require("./routes/user_route");
-// var routeContact = require("./routes/contact-route");
-// const config = require("config");
+const auth = require("./routes/auth");
+const cricketStatistics = require("./routes/cricketStatistics");
+const footballStatistics = require("./routes/footballStatistics");
+const sportsAchievements = require("./routes/sportsAchievements");
+const users = require("./routes/user");
 
-var app = express();
-// winston.handleExceptions(
-//   new winston.transports.Console({ colorize: true, prettyPrint: true }),
-//   new winston.transports.File({ filename: "uncaughtExceptions.log" })
-// );
+if (!config.get("jwtPrivateKey")) {
+  console.error("FATAL ERROR: jwtPrivateKet not defined.");
+  process.exit(1);
+}
 
-process.on("unhandledRejection", (ex) => {
-  throw ex;
-});
-// winston.add(winston.transports.File, { filename: "logfile.log" });
-mongoos.set("useCreateIndex", true);
-
-require("dotenv").config(); //environmental variables
-// process.env.SUPRESS_NO_CONFIG_WARNING = 'y';
-const port = process.env.PORT;
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookiesParser());
-app.use(cors());
-// app.use("/user", routesUser);
-// app.use("/feedback", routeContact);
-
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-// "Access-Control-Allow-Headers",
-// "Origin, Content-Type, Accept, Authorization"
-//   );
-//   if (req.method === "OPTIONS") {
-// res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-// res.status(200).json({});
-//   }
-//   next();
-// });
-
-app.use(function (req, res, next) {
-  next(createError(404));
-});
-
-mongoos
-  .connect("mongodb://localhost/Cracio", {
+const connectionString = "mongodb://localhost/WhiteLabelApp";
+mongoose
+  .connect(connectionString, {
     useNewUrlParser: true,
+    useCreateIndex: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
-  .then(() => {
-    console.log("MongoDB SERVER connected");
-    winston.info("Winston: Connected to Mongo ....");
-  })
-  .catch((error) => console.log(error.message));
+  .then(() => console.log("Connected to MongoDB..."))
+  .catch((err) => console.error("Could not connect to MongoDb... ", err));
 
-// mongoos.Promise = global.Promise;
-app.listen(port, () => {
-  console.log("Server is running on port: " + port);
-});
+app.use(express.json());
+app.use("/api/auth", auth);
+app.use("/api/cricketStatistics", cricketStatistics);
+app.use("/api/footballStatistics", footballStatistics);
+app.use("/api/sportsAchievements", sportsAchievements);
+app.use("/api/users", users);
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`listening on port ${port}...`));
