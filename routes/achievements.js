@@ -2,16 +2,18 @@ const express = require("express");
 const _ = require("lodash");
 const router = express.Router();
 
-const { Achievement, validation } = require("../models/sportsAchievements");
+const { Achievement, validation } = require("../models/achievements");
 
 router.post("/", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  achievement = new Achievement(_.pick(req.body, ["achievement", "year"]));
+  achievement = new Achievement(
+    _.pick(req.body, ["achievement", "description", "year"])
+  );
   await achievement.save();
 
-  res.send(_.pick(achievement, ["_id", "achievement", "year"]));
+  res.send(_.pick(achievement, ["_id", "achievement", "description", "year"]));
 });
 
 router.get("/", async (req, res) => {
@@ -33,6 +35,7 @@ router.put("/:id", async (req, res) => {
   let achievement = await Achievement.findOneAndUpdate({
     _id: req.params.id,
     achievement: req.body.achievement,
+    description: req.body.description,
     year: req.body.year,
   });
 

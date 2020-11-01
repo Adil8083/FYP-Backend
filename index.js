@@ -4,9 +4,9 @@ const config = require("config");
 const app = express();
 
 const auth = require("./routes/auth");
-const cricketStatistics = require("./routes/cricketStatistics");
-const footballStatistics = require("./routes/footballStatistics");
-const sportsAchievements = require("./routes/sportsAchievements");
+const achievements = require("./routes/achievements");
+const sportInfo = require("./routes/sportInfo");
+const statistics = require("./routes/statistics");
 const users = require("./routes/user");
 
 if (!config.get("jwtPrivateKey")) {
@@ -27,9 +27,9 @@ mongoose
 
 app.use(express.json());
 app.use("/api/auth", auth);
-app.use("/api/cricketStatistics", cricketStatistics);
-app.use("/api/footballStatistics", footballStatistics);
-app.use("/api/sportsAchievements", sportsAchievements);
+app.use("/api/achievements", achievements);
+app.use("/api/sportInfo", sportInfo);
+app.use("/api/statistics", statistics);
 app.use("/api/users", users);
 
 const port = process.env.PORT || 3000;

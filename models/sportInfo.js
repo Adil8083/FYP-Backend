@@ -24,5 +24,5 @@ const schema = Joi.object({
   position_in_team: Joi.string().min(5).max(255).required(),
 });
 
-module.exports.SportsInfo = sportInfo;
+module.exports.SportInfo = sportInfo;
 module.exports.validation = schema;
