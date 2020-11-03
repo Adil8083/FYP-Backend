@@ -2,6 +2,7 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const { string, array } = require("joi");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -27,6 +28,92 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 1024,
   },
+  AppName: {
+    type: String,
+  },
+  AppIcon: {
+    type: String,
+  },
+  ContactEmail: {
+    type: String,
+    minlength: 5,
+    maxlength: 255,
+  },
+  profilePic: {
+    type: String,
+  },
+  Country: {
+    type: String,
+  },
+  DateOfBirth: {
+    type: String,
+  },
+  Category: {
+    type: String,
+  },
+  Facebook: {
+    type: String,
+  },
+  Insta: {
+    type: String,
+  },
+  Twitter: {
+    type: String,
+  },
+  Youtube: {
+    type: String,
+  },
+  ActorDegree: {
+    type: String,
+  },
+  ActorInstitute: {
+    type: String,
+  },
+  Gallery: {
+    type: Array,
+  },
+  EyeColor: {
+    type: String,
+  },
+  HairColor: {
+    type: String,
+  },
+  Height: {
+    type: Number,
+  },
+  Weight: {
+    type: Number,
+  },
+  concert: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ConcertDetails",
+    },
+  ],
+  poster: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Poster",
+    },
+  ],
+  achievements: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Achievement",
+    },
+  ],
+  sportInfo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Sport Info",
+    },
+  ],
+  statistics: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Statistic",
+    },
+  ],
 });
 
 userSchema.methods.genAuthToken = function () {
@@ -42,6 +129,27 @@ const schema = Joi.object({
   password: Joi.string().min(5).max(1024).required(),
   gender: Joi.string().required(),
 });
-
+const schemaForUpdate = Joi.object({
+  AppName: Joi.string(),
+  AppIcon: Joi.string(),
+  ContactEmail: Joi.string(),
+  profilePic: Joi.string(),
+  Country: Joi.string(),
+  DateOfBirth: Joi.string(),
+  Category: Joi.string(),
+  Facebook: Joi.string(),
+  Insta: Joi.string(),
+  Twitter: Joi.string(),
+  Youtube: Joi.string(),
+  ActorDegree: Joi.string(),
+  ActorInstitute: Joi.string(),
+  Gallery: Joi.array(),
+  EyeColor: Joi.string(),
+  HairColor: Joi.string(),
+  Height: Joi.number(),
+  Weight: Joi.number(),
+  Gallery: Joi.array(),
+});
 exports.User = User;
 exports.validation = schema;
+exports.UpdateValidation = schemaForUpdate;

@@ -8,6 +8,8 @@ const achievements = require("./routes/achievements");
 const sportInfo = require("./routes/sportInfo");
 const statistics = require("./routes/statistics");
 const users = require("./routes/user");
+const ConcertDetails = require("./routes/ConcertDetails");
+const Poster = require("./routes/Poster");
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKet not defined.");
@@ -31,6 +33,8 @@ app.use("/api/achievements", achievements);
 app.use("/api/sportInfo", sportInfo);
 app.use("/api/statistics", statistics);
 app.use("/api/users", users);
+app.use("/api/concert", ConcertDetails);
+app.use("/api/poster", Poster);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening on port ${port}...`));

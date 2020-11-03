@@ -8,20 +8,18 @@ const achievemntsSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: false,
   },
   year: {
     type: String,
-    required: true,
   },
 });
 
 const achievement = mongoose.model("Achievement", achievemntsSchema);
 
 const schema = Joi.object({
-  achievement: Joi.string().min(5).required(),
+  achievement: Joi.string().required(),
   description: Joi.string(),
-  year: Joi.string().required(),
+  year: Joi.string(),
 });
 
 exports.Achievement = achievement;
