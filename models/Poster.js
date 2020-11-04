@@ -26,13 +26,6 @@ const validation = Joi.object({
   album: Joi.string(),
   category: Joi.string(),
 });
-const updateValidation = Joi.object({
-  name: Joi.string(),
-  poster: Joi.string(),
-  album: Joi.string(),
-  category: Joi.string(),
-});
 
 exports.Poster = PosterSchema;
 exports.validation = validation;
-exports.updateValidation = updateValidation;

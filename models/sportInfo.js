@@ -2,6 +2,10 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const sportsSchema = new mongoose.Schema({
+  sport_id: {
+    type: Number,
+    required: true,
+  },
   sport: {
     type: String,
     required: true,
@@ -19,6 +23,7 @@ const sportsSchema = new mongoose.Schema({
 const sportInfo = mongoose.model("Sport Info", sportsSchema);
 
 const schema = Joi.object({
+  sport_id: Joi.number().required(),
   sport: Joi.string().required(),
   teamName: Joi.string().min(5).max(255).required(),
   position_in_team: Joi.string().min(5).max(255).required(),

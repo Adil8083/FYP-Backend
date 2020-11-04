@@ -46,7 +46,7 @@ router.post("/signup", async (req, res) => {
 
 router.put("/update/:email", async (req, res) => {
   let user = await User.findOne({
-    email: req.params.email, //.replace(/['"]+/g, ""),
+    email: req.params.email,
   });
   if (user) {
     const { error } = UpdateValidation.validate(req.body);
@@ -54,6 +54,18 @@ router.put("/update/:email", async (req, res) => {
 
     await User.findByIdAndUpdate({ _id: user._id }, req.body);
     res.send("Updated Succesfully");
+  } else {
+    res.status(400).send("This email is not associated with any account");
+  }
+});
+
+router.delete("/delete/:email", async (req, res) => {
+  let user = await User.findOne({
+    email: req.params.email,
+  });
+  if (user) {
+    await User.findByIdAndRemove(user._id);
+    res.send("Deleted Succesfully");
   } else {
     res.status(400).send("This email is not associated with any account");
   }

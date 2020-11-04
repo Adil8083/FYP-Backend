@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Poster, validation, updateValidation } = require("../models/Poster.js");
+const { Poster, validation } = require("../models/Poster.js");
 const { User } = require("../models/user");
 
 // create
@@ -12,9 +12,10 @@ router.post("/:email", async (req, res) => {
   let user = await User.findOne({ email: req.params.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
-
-  let poster = await Poster.findOne({ name: req.body.name });
-  if (poster)
+  user = await User.findById(user._id).populate("poster");
+  let poster = user.poster;
+  poster = poster.filter((obj) => obj.name === req.body.name);
+  if (poster.length)
     return res.status(400).send("Poster with this name is already added");
 
   poster = new Poster(req.body);
@@ -38,21 +39,52 @@ router.get("/get/:email", async (req, res) => {
 });
 
 // update
-router.put("/update/:email", async (req, res) => {
-  // name,email
-  const obj = await Poster.findOne({ name: req.params.email });
+router.put("/update/:email/:name", async (req, res) => {
+  let user = await User.findOne({ email: req.params.email });
+  if (!user)
+    return res.status(400).send("User with this email is not registered.");
+
+  const obj = await Poster.findOne({ name: req.params.name });
   if (!obj) return res.status(400).send("This Poster Detail is not added yet");
-  const { error } = updateValidation.validate(req.body);
+
+  user = await User.findById(user._id).populate("poster");
+  let poster = user.poster;
+  let id_to_update = poster
+    .map((obj) => {
+      if (obj.name === req.params.name) return obj._id;
+      else return undefined;
+    })
+    .filter((obj) => obj !== undefined);
+
+  const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  await Poster.findByIdAndUpdate({ _id: obj._id }, req.body);
+  await Poster.findByIdAndUpdate({ _id: id_to_update }, req.body);
   res.send("Updated Succesfully");
 });
 
 // delete
-router.delete("/delete/:email", async (req, res) => {
-  const obj = await Poster.findOne({ name: req.params.email });
+router.delete("/delete/:email/:name", async (req, res) => {
+  let user = await User.findOne({ email: req.params.email });
+  if (!user)
+    return res.status(400).send("User with this email is not registered.");
+
+  const obj = await Poster.findOne({ name: req.params.name });
   if (!obj) return res.status(400).send("This Poster Detail is not added yet");
-  await Poster.findByIdAndDelete({ _id: obj._id });
+
+  user = await User.findById(user._id).populate("poster");
+  let poster = user.poster;
+  let id_to_delete = poster
+    .map((obj) => {
+      if (obj.name === req.params.name) return obj._id;
+      else return undefined;
+    })
+    .filter((obj) => obj !== undefined);
+
+  let updatedPoster = poster.filter((obj) => obj.name !== req.params.name);
+
+  await User.updateOne({ _id: user._id }, { $set: { poster: updatedPoster } });
+  await Poster.findByIdAndDelete({ _id: id_to_delete });
+
   res.send("Deleted Succesfully");
 });
 
