@@ -2,10 +2,6 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const statisticsSchema = new mongoose.Schema({
-  statistic_id: {
-    type: Number,
-    required: true,
-  },
   tournament: {
     type: String,
     required: true,
@@ -35,7 +31,6 @@ const statisticsSchema = new mongoose.Schema({
 const statistic = mongoose.model("Statistic", statisticsSchema);
 
 const schema = Joi.object({
-  statistic_id: Joi.number().required(),
   tournament: Joi.string().required(),
   club: Joi.string().min(5).max(255),
   total_matches: Joi.string().min(1).required(),

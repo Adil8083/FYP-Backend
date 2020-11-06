@@ -71,7 +71,7 @@ router.delete("/delete/:email", async (req, res) => {
   }
 });
 
-router.get("/login", auth, async (req, res) => {
+router.get("/get", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
     res.send(user);

@@ -11,17 +11,8 @@ router.post("/:email", async (req, res) => {
   let user = await User.findOne({ email: req.params.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
-  user = await User.findById(user._id).populate("statistics");
-  let statistic = user.statistics;
-  statistic = statistic.filter(
-    (obj) => obj.statistic_id === req.body.statistic_id
-  );
-  if (statistic.length)
-    return res.status(400).send("Statistic with this id is already added");
-
   statistic = new Statistic(
     _.pick(req.body, [
-      "statistic_id",
       "tournament",
       "total_matches",
       "total_score",
@@ -40,7 +31,6 @@ router.post("/:email", async (req, res) => {
   res.send(
     _.pick(statistic, [
       "_id",
-      "statistic_id",
       "tournament",
       "total_matches",
       "total_score",
@@ -69,16 +59,14 @@ router.delete("/delete/:email/:id", async (req, res) => {
   let statistic = user.statistics;
   let id_to_delete = statistic
     .map((obj) => {
-      if (obj.statistic_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
 
   if (id_to_delete.length === 0)
     return res.status(400).send("This Statistic is not added yet.");
-  let updatedStatistics = statistic.filter(
-    (obj) => obj.statistic_id !== parseInt(req.params.id)
-  );
+  let updatedStatistics = statistic.filter((obj) => obj.id !== req.params.id);
   await User.updateOne(
     { _id: user._id },
     { $set: { statistics: updatedStatistics } }
@@ -98,7 +86,7 @@ router.put("/update/:email/:id", async (req, res) => {
   let statistic = user.statistics;
   let id_to_update = statistic
     .map((obj) => {
-      if (obj.statistic_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
@@ -108,10 +96,7 @@ router.put("/update/:email/:id", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  await Statistic.findOneAndUpdate(
-    { _id: id_to_update, statistic_id: parseInt(req.params.id) },
-    req.body
-  );
+  await Statistic.findOneAndUpdate({ _id: id_to_update }, req.body);
 
   res.send("Updated Succesfully");
 });

@@ -1,4 +1,5 @@
 const express = require("express");
+const { parseInt } = require("lodash");
 const router = express.Router();
 
 const { ConcertDetails, validation } = require("../models/ConcertDetails");
@@ -12,12 +13,6 @@ router.post("/:email", async (req, res) => {
   let user = await User.findOne({ email: req.params.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
-
-  user = await User.findById(user._id).populate("concert");
-  let concert = user.concert;
-  concert = concert.filter((obj) => obj.concert_id === req.body.concert_id);
-  if (concert.length)
-    return res.status(400).send("Concert with this id is already added");
 
   const concertDetails = new ConcertDetails(req.body);
   concertDetails.save();
@@ -48,12 +43,12 @@ router.put("/update/:email/:id", async (req, res) => {
   let concert = user.concert;
   let id_to_update = concert
     .map((obj) => {
-      if (obj.concert_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
   if (id_to_update.length === 0)
-    return res.status(400).send("This Concert is not added yet.");
+    return res.status(400).send("Concert with this id is not added yet");
 
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -72,15 +67,13 @@ router.delete("/delete/:email/:id", async (req, res) => {
   let concert = user.concert;
   let id_to_delete = concert
     .map((obj) => {
-      if (obj.concert_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
   if (id_to_delete.length === 0)
-    return res.status(400).send("This Concert is not added yet.");
-  let updatedConcerts = concert.filter(
-    (obj) => obj.concert_id !== parseInt(req.params.id)
-  );
+    return res.status(400).send("Concert with this id is not added yet");
+  let updatedConcerts = concert.filter((obj) => obj.id !== req.params.id);
   await User.updateOne(
     { _id: user._id },
     { $set: { concert: updatedConcerts } }

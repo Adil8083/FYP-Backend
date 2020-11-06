@@ -16,7 +16,8 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
-const connectionString = "mongodb://localhost/WhiteLabelApp";
+const connectionString =
+  "mongodb+srv://uzairnaseem:hassan234@freecluster.wojcd.mongodb.net/<dbname>?retryWrites=true&w=majority";
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,

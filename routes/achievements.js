@@ -13,16 +13,8 @@ router.post("/:email", async (req, res) => {
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
-  user = await User.findById(user._id).populate("achievements");
-  let achievement = user.achievements;
-  achievement = achievement.filter(
-    (obj) => obj.achievement_id === req.body.achievement_id
-  );
-  if (achievement.length)
-    return res.status(400).send("Achievement with this id is already added");
-
   achievement = new Achievement(
-    _.pick(req.body, ["achievement_id", "achievement", "description", "year"])
+    _.pick(req.body, ["achievement", "description", "year"])
   );
   await achievement.save();
 
@@ -31,25 +23,15 @@ router.post("/:email", async (req, res) => {
     { $push: { achievements: achievement._id } }
   );
 
-  res.send(
-    _.pick(achievement, [
-      "_id",
-      "achievement_id",
-      "achievement",
-      "description",
-      "year",
-    ])
-  );
+  res.send(_.pick(achievement, ["_id", "achievement", "description", "year"]));
 });
 // Read
 router.get("/get/:email", async (req, res) => {
-  //const achievements = await Achievement.find().sort({ year: 1 });
   let user = await User.findOne({ email: req.params.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
   const achievement = await User.findById(user._id).populate("achievements");
-  // Sort below achievement.achievements object as it is not sorted yet
   res.send(achievement.achievements);
 });
 // delete
@@ -62,7 +44,7 @@ router.delete("/delete/:email/:id", async (req, res) => {
   let achievement = user.achievements;
   let id_to_delete = achievement
     .map((obj) => {
-      if (obj.achievement_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
@@ -71,7 +53,7 @@ router.delete("/delete/:email/:id", async (req, res) => {
     return res.status(400).send("This Achievement is not added yet.");
 
   let updatedAchievements = achievement.filter(
-    (obj) => obj.achievement_id !== parseInt(req.params.id)
+    (obj) => obj.id !== req.params.id
   );
   await User.updateOne(
     { _id: user._id },
@@ -93,7 +75,7 @@ router.put("/update/:email/:id", async (req, res) => {
   let achievement = user.achievements;
   let id_to_update = achievement
     .map((obj) => {
-      if (obj.achievement_id === parseInt(req.params.id)) return obj._id;
+      if (obj.id === req.params.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
@@ -104,10 +86,7 @@ router.put("/update/:email/:id", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  await Achievement.findOneAndUpdate(
-    { _id: id_to_update, achievement_id: parseInt(req.params.id) },
-    req.body
-  );
+  await Achievement.findOneAndUpdate({ _id: id_to_update }, req.body);
 
   res.send("Updated Succesfully");
 });
