@@ -27,12 +27,10 @@ router.post("/signup", async (req, res) => {
     Insta: " ",
     Twitter: " ",
     Youtube: " ",
-    ActorDegree: " ",
-    ActorInstitute: " ",
     EyeColor: " ",
     HairColor: " ",
-    Height: 1,
-    Weight: 1,
+    Height: " ",
+    Weight: " ",
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
@@ -44,9 +42,9 @@ router.post("/signup", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
-router.put("/update/:email", async (req, res) => {
+router.put("/update", async (req, res) => {
   let user = await User.findOne({
-    email: req.params.email,
+    email: req.query.email,
   });
   if (user) {
     const { error } = UpdateValidation.validate(req.body);
@@ -59,9 +57,9 @@ router.put("/update/:email", async (req, res) => {
   }
 });
 
-router.delete("/delete/:email", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   let user = await User.findOne({
-    email: req.params.email,
+    email: req.query.email,
   });
   if (user) {
     await User.findByIdAndRemove(user._id);

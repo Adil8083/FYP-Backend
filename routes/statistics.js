@@ -4,15 +4,16 @@ const router = express.Router();
 const { Statistic, validation } = require("../models/statistics");
 const { User } = require("../models/user");
 
-router.post("/:email", async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({ email: req.params.email });
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
   statistic = new Statistic(
     _.pick(req.body, [
+      "identifier",
       "tournament",
       "total_matches",
       "total_score",
@@ -24,13 +25,14 @@ router.post("/:email", async (req, res) => {
   await statistic.save();
 
   await User.findOneAndUpdate(
-    { email: req.params.email },
+    { email: req.query.email },
     { $push: { statistics: statistic._id } }
   );
 
   res.send(
     _.pick(statistic, [
       "_id",
+      "identifier",
       "tournament",
       "total_matches",
       "total_score",
@@ -41,8 +43,8 @@ router.post("/:email", async (req, res) => {
   );
 });
 
-router.get("/get/:email", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.get("/get", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -50,8 +52,8 @@ router.get("/get/:email", async (req, res) => {
   res.send(statistics.statistics);
 });
 
-router.delete("/delete/:email/:id", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.delete("/delete", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -59,14 +61,16 @@ router.delete("/delete/:email/:id", async (req, res) => {
   let statistic = user.statistics;
   let id_to_delete = statistic
     .map((obj) => {
-      if (obj.id === req.params.id) return obj._id;
+      if (obj.identifier === req.query.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
 
   if (id_to_delete.length === 0)
     return res.status(400).send("This Statistic is not added yet.");
-  let updatedStatistics = statistic.filter((obj) => obj.id !== req.params.id);
+  let updatedStatistics = statistic.filter(
+    (obj) => obj.identifier !== req.query.id
+  );
   await User.updateOne(
     { _id: user._id },
     { $set: { statistics: updatedStatistics } }
@@ -77,8 +81,8 @@ router.delete("/delete/:email/:id", async (req, res) => {
 
   res.send("Deleted Succesfully");
 });
-router.put("/update/:email/:id", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.put("/update", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -86,7 +90,7 @@ router.put("/update/:email/:id", async (req, res) => {
   let statistic = user.statistics;
   let id_to_update = statistic
     .map((obj) => {
-      if (obj.id === req.params.id) return obj._id;
+      if (obj.identifier === req.query.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);

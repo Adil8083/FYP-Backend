@@ -6,11 +6,11 @@ const { ConcertDetails, validation } = require("../models/ConcertDetails");
 const { User } = require("../models/user");
 
 // create
-router.post("/:email", async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({ email: req.params.email });
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -18,15 +18,15 @@ router.post("/:email", async (req, res) => {
   concertDetails.save();
 
   await User.findOneAndUpdate(
-    { email: req.params.email },
+    { email: req.query.email },
     { $push: { concert: concertDetails._id } }
   );
   res.send(concertDetails);
 });
 
 // Read
-router.get("/get/:email", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.get("/get", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
   const concert = await User.findById(user._id).populate("concert");
@@ -34,8 +34,8 @@ router.get("/get/:email", async (req, res) => {
 });
 
 // update
-router.put("/update/:email/:id", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.put("/update", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -43,7 +43,7 @@ router.put("/update/:email/:id", async (req, res) => {
   let concert = user.concert;
   let id_to_update = concert
     .map((obj) => {
-      if (obj.id === req.params.id) return obj._id;
+      if (obj.identifier === req.query.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
@@ -58,8 +58,8 @@ router.put("/update/:email/:id", async (req, res) => {
 });
 
 // delete
-router.delete("/delete/:email/:id", async (req, res) => {
-  let user = await User.findOne({ email: req.params.email });
+router.delete("/delete", async (req, res) => {
+  let user = await User.findOne({ email: req.query.email });
   if (!user)
     return res.status(400).send("User with this email is not registered.");
 
@@ -67,13 +67,15 @@ router.delete("/delete/:email/:id", async (req, res) => {
   let concert = user.concert;
   let id_to_delete = concert
     .map((obj) => {
-      if (obj.id === req.params.id) return obj._id;
+      if (obj.identifier === req.query.id) return obj._id;
       else return undefined;
     })
     .filter((obj) => obj !== undefined);
   if (id_to_delete.length === 0)
     return res.status(400).send("Concert with this id is not added yet");
-  let updatedConcerts = concert.filter((obj) => obj.id !== req.params.id);
+  let updatedConcerts = concert.filter(
+    (obj) => obj.identifier !== req.query.id
+  );
   await User.updateOne(
     { _id: user._id },
     { $set: { concert: updatedConcerts } }

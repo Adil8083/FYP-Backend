@@ -26,6 +26,12 @@ const validation = Joi.object({
   album: Joi.string(),
   category: Joi.string(),
 });
+const UpdateValidation = Joi.object({
+  name: Joi.string().required(),
+  album: Joi.string(),
+  category: Joi.string(),
+});
 
 exports.Poster = PosterSchema;
 exports.validation = validation;
+exports.UpdateValidation = UpdateValidation;
