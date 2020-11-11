@@ -27,12 +27,10 @@ router.post("/signup", async (req, res) => {
     Insta: " ",
     Twitter: " ",
     Youtube: " ",
-    ActorDegree: " ",
-    ActorInstitute: " ",
     EyeColor: " ",
     HairColor: " ",
-    Height: 1,
-    Weight: 1,
+    Height: " ",
+    Weight: " ",
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
@@ -44,12 +42,9 @@ router.post("/signup", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
-router.put("/update/:email", async (req, res) => {
-  const { error } = UpdateValidation.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.put("/update", async (req, res) => {
   let user = await User.findOne({
-    email: req.params.email, //.replace(/['"]+/g, ""),
+    email: req.query.email,
   });
 
   if (user) {
@@ -60,7 +55,19 @@ router.put("/update/:email", async (req, res) => {
   }
 });
 
-router.get("/login", auth, async (req, res) => {
+router.delete("/delete", async (req, res) => {
+  let user = await User.findOne({
+    email: req.query.email,
+  });
+  if (user) {
+    await User.findByIdAndRemove(user._id);
+    res.send("Deleted Succesfully");
+  } else {
+    res.status(400).send("This email is not associated with any account");
+  }
+});
+
+router.get("/get", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
     res.send(user);

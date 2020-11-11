@@ -2,7 +2,11 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const achievemntsSchema = new mongoose.Schema({
-  achievement: {
+  identifier: {
+    type: String,
+    required: true,
+  },
+  name: {
     type: String,
     required: true,
   },
@@ -17,7 +21,8 @@ const achievemntsSchema = new mongoose.Schema({
 const achievement = mongoose.model("Achievement", achievemntsSchema);
 
 const schema = Joi.object({
-  achievement: Joi.string().required(),
+  identifier: Joi.string().required(),
+  name: Joi.string().required(),
   description: Joi.string(),
   year: Joi.string(),
 });

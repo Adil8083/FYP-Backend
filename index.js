@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const config = require("config");
 const app = express();
+require("dotenv/config");
 
 const auth = require("./routes/auth");
 const achievements = require("./routes/achievements");
@@ -16,9 +17,8 @@ if (!config.get("jwtPrivateKey")) {
   process.exit(1);
 }
 
-const connectionString = "mongodb://localhost/WhiteLabelApp";
 mongoose
-  .connect(connectionString, {
+  .connect(process.env.DB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -36,5 +36,5 @@ app.use("/api/users", users);
 app.use("/api/concert", ConcertDetails);
 app.use("/api/poster", Poster);
 
-const port = process.env.PORT || 3000;
+const port = 3000 || process.env.PORT;
 app.listen(port, () => console.log(`listening on port ${port}...`));
