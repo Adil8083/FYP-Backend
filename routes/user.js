@@ -45,13 +45,14 @@ router.post("/signup", async (req, res) => {
 });
 
 router.put("/update/:email", async (req, res) => {
+  const { error } = UpdateValidation.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
   let user = await User.findOne({
     email: req.params.email, //.replace(/['"]+/g, ""),
   });
-  if (user) {
-    const { error } = UpdateValidation.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
 
+  if (user) {
     await User.findByIdAndUpdate({ _id: user._id }, req.body);
     res.send("Updated Succesfully");
   } else {
