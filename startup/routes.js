@@ -10,7 +10,6 @@ const Poster = require("../routes/Poster");
 
 module.exports = function (app) {
   app.use(express.json());
-  app.use(cors());
   app.use("/api/auth", auth);
   app.use("/api/achievements", achievements);
   app.use("/api/sportInfo", sportInfo);
