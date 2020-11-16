@@ -1,11 +1,9 @@
 const express = require("express");
-const { parseInt } = require("lodash");
 const router = express.Router();
 
 const { ConcertDetails, validation } = require("../models/ConcertDetails");
 const { User } = require("../models/user");
 
-// create
 router.post("/", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -24,7 +22,6 @@ router.post("/", async (req, res) => {
   res.send(concertDetails);
 });
 
-// Read
 router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)
@@ -33,7 +30,6 @@ router.get("/get", async (req, res) => {
   res.send(concert.concert);
 });
 
-// update
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)
@@ -57,7 +53,6 @@ router.put("/update", async (req, res) => {
   res.send("Updated Succesfully");
 });
 
-// delete
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)

@@ -1,6 +1,7 @@
 const express = require("express");
 const _ = require("lodash");
 const router = express.Router();
+
 const { SportInfo, validation } = require("../models/sportInfo");
 const { User } = require("../models/user");
 
@@ -49,6 +50,7 @@ router.delete("/delete", async (req, res) => {
 
   res.send("Deleted Succesfully");
 });
+
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)

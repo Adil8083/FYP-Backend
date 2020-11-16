@@ -1,6 +1,7 @@
 const express = require("express");
 const _ = require("lodash");
 const router = express.Router();
+
 const { Statistic, validation } = require("../models/statistics");
 const { User } = require("../models/user");
 
@@ -44,12 +45,16 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/get", async (req, res) => {
-  let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
+  try {
+    let user = await User.findOne({ email: req.query.email });
+    if (!user)
+      return res.status(400).send("User with this email is not registered.");
 
-  const statistics = await User.findById(user._id).populate("statistics");
-  res.send(statistics.statistics);
+    const statistics = await User.findById(user._id).populate("statistics");
+    res.send(statistics.statistics);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/delete", async (req, res) => {
@@ -81,6 +86,7 @@ router.delete("/delete", async (req, res) => {
 
   res.send("Deleted Succesfully");
 });
+
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)

@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { Achievement, validation } = require("../models/achievements");
 const { User } = require("../models/user");
-// Create
+
 router.post("/", async (req, res) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     _.pick(achievement, ["_id", "identifier", "name", "description", "year"])
   );
 });
-// Read
+
 router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)
@@ -36,7 +36,7 @@ router.get("/get", async (req, res) => {
   const achievement = await User.findById(user._id).populate("achievements");
   res.send(achievement.achievements);
 });
-// delete
+
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)
@@ -66,7 +66,7 @@ router.delete("/delete", async (req, res) => {
 
   res.send("Deleted Succesfully");
 });
-// update
+
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
   if (!user)
