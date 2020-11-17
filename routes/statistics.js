@@ -10,8 +10,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
   statistic = new Statistic(
     _.pick(req.body, [
       "identifier",
@@ -47,8 +45,6 @@ router.post("/", async (req, res) => {
 router.get("/get", async (req, res) => {
   try {
     let user = await User.findOne({ email: req.query.email });
-    if (!user)
-      return res.status(400).send("User with this email is not registered.");
 
     const statistics = await User.findById(user._id).populate("statistics");
     res.send(statistics.statistics);
@@ -59,8 +55,6 @@ router.get("/get", async (req, res) => {
 
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("statistics");
   let statistic = user.statistics;
@@ -89,8 +83,6 @@ router.delete("/delete", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("statistics");
   let statistic = user.statistics;

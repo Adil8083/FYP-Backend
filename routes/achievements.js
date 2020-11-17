@@ -10,8 +10,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   achievement = new Achievement(
     _.pick(req.body, ["identifier", "name", "description", "year"])
@@ -30,8 +28,6 @@ router.post("/", async (req, res) => {
 
 router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   const achievement = await User.findById(user._id).populate("achievements");
   res.send(achievement.achievements);
@@ -39,8 +35,6 @@ router.get("/get", async (req, res) => {
 
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("achievements");
   let achievement = user.achievements;
@@ -69,8 +63,6 @@ router.delete("/delete", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("achievements");
   let achievement = user.achievements;

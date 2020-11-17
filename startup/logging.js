@@ -12,6 +12,6 @@ module.exports = function () {
   });
   winston.add(winston.transports.File, { filename: "logfile.log" });
   winston.add(winston.transports.MongoDB, {
-    db: process.env.DB_COMPASS_STRING,
+    db: process.env.DB_CONNECTION_STRING,
   });
 };

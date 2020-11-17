@@ -14,8 +14,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 255,
     unique: true,
   },
   gender: {
@@ -36,8 +34,6 @@ const userSchema = new mongoose.Schema({
   },
   ContactEmail: {
     type: String,
-    minlength: 5,
-    maxlength: 255,
   },
   profilePic: {
     type: String,

@@ -16,7 +16,7 @@ router.post("/signup", async (req, res) => {
     ...req.body,
     AppName: " ",
     AppIcon: " ",
-    ContactEmail: "abcdfh@hotmail.com",
+    ContactEmail: " ",
     profilePic: " ",
     Country: " ",
     DateOfBirth: " ",
@@ -35,9 +35,7 @@ router.post("/signup", async (req, res) => {
   await user.save();
 
   const token = user.genAuthToken();
-  res
-    .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email", "gender"]));
+  res.header("x-auth-token", token).send(user);
 });
 
 router.put("/update", async (req, res) => {
@@ -66,12 +64,10 @@ router.delete("/delete", async (req, res) => {
 });
 
 router.get("/get", async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id).select("-password");
-    res.send(user);
-  } catch (error) {
-    res.send(error);
-  }
+  let user = await User.findOne({
+    email: req.query.email,
+  });
+  res.send(user);
 });
 
 module.exports = router;

@@ -9,8 +9,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   const concertDetails = new ConcertDetails(req.body);
   concertDetails.save();
@@ -24,16 +22,12 @@ router.post("/", async (req, res) => {
 
 router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
   const concert = await User.findById(user._id).populate("concert");
   res.send(concert.concert);
 });
 
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("concert");
   let concert = user.concert;
@@ -55,8 +49,6 @@ router.put("/update", async (req, res) => {
 
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("concert");
   let concert = user.concert;

@@ -10,8 +10,6 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   let info = new SportInfo(
     _.pick(req.body, ["sport", "teamName", "position_in_team"])
@@ -27,16 +25,12 @@ router.post("/", async (req, res) => {
 
 router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
   const sportInfo = await User.findById(user._id).populate("sportInfo");
   res.send(sportInfo.sportInfo);
 });
 
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("sportInfo");
   let sport = user.sportInfo;
@@ -53,8 +47,6 @@ router.delete("/delete", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
-  if (!user)
-    return res.status(400).send("User with this email is not registered.");
 
   user = await User.findById(user._id).populate("sportInfo");
   let sport = user.sportInfo;
