@@ -10,11 +10,11 @@ const statisticsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  total_score: {
+  average_score: {
     type: String,
     required: false,
   },
-  total_matches: {
+  average_matches: {
     type: String,
     required: true,
   },
@@ -40,8 +40,8 @@ const schema = Joi.object({
   club: Joi.string().min(5).max(255),
   total_matches: Joi.string().min(1).required(),
   total_goals: Joi.string().min(1),
-  total_score: Joi.string().min(1),
-  total_wickets: Joi.string().min(1),
+  average_score: Joi.string().min(1),
+  average_wickets: Joi.string().min(1),
 });
 
 module.exports.Statistic = statistic;

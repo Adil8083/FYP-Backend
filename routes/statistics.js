@@ -15,8 +15,8 @@ router.post("/", async (req, res) => {
       "identifier",
       "tournament",
       "total_matches",
-      "total_score",
-      "total_wickets",
+      "average_score",
+      "average_wickets",
       "club",
       "total_goals",
     ])
@@ -34,8 +34,8 @@ router.post("/", async (req, res) => {
       "identifier",
       "tournament",
       "total_matches",
-      "total_score",
-      "total_wickets",
+      "average_score",
+      "average_wickets",
       "club",
       "total_goals",
     ])
