@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 
   await User.findOneAndUpdate(
     { email: req.query.email },
-    { $push: { sportInfo: info._id } }
+    { $set: { sportInfo: info._id } }
   );
   res.send(_.pick(info, ["_id", "sport", "teamName", "position_in_team"]));
 });

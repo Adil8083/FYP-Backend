@@ -77,6 +77,18 @@ const userSchema = new mongoose.Schema({
   Weight: {
     type: Number,
   },
+  politicianInfo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PoliticianInfo",
+    },
+  ],
+  politicianProj: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PoliticianProj",
+    },
+  ],
   concert: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -123,7 +135,6 @@ userSchema.methods.genAuthToken = function () {
 };
 
 const User = mongoose.model("User", userSchema);
-
 const schema = Joi.object({
   name: Joi.string().min(5).max(50).required(),
   email: Joi.string().min(5).max(255).required().email(),

@@ -7,6 +7,8 @@ const statistics = require("../routes/statistics");
 const users = require("../routes/user");
 const ConcertDetails = require("../routes/ConcertDetails");
 const Poster = require("../routes/Poster");
+const PoliticianInfo = require("../routes/PoliticianInfo");
+const politicianProj = require("../routes/PoliticianProj");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -17,5 +19,7 @@ module.exports = function (app) {
   app.use("/api/users", users);
   app.use("/api/concert", ConcertDetails);
   app.use("/api/poster", Poster);
+  app.use("/api/politicianInfo", PoliticianInfo);
+  app.use("/api/politicianProj", politicianProj);
   app.use(error);
 };
