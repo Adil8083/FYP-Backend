@@ -80,6 +80,9 @@ const userSchema = new mongoose.Schema({
   Weight: {
     type: Number,
   },
+  hobbies: {
+    type: Array,
+  },
   politicianInfo: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -158,6 +161,7 @@ const schemaForUpdate = Joi.object({
   Youtube: Joi.string(),
   ActorEducation: Joi.array(),
   PoliticianEducation: Joi.array(),
+  hobbies: Joi.array(),
   Gallery: Joi.array(),
   EyeColor: Joi.string(),
   HairColor: Joi.string(),
