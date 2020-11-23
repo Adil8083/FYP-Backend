@@ -9,7 +9,11 @@ const ConcertDetails = require("../routes/ConcertDetails");
 const Poster = require("../routes/Poster");
 const PoliticianInfo = require("../routes/PoliticianInfo");
 const politicianProj = require("../routes/PoliticianProj");
-// const countryNames = require("../routes/countryNames");
+const countryNames = require("../routes/countryNames");
+const cityNames = require("../routes/cityNames");
+const yearList = require("../routes/yearList");
+const cricketTournament = require("../routes/cricketTournament");
+const footballTournament = require("../routes/footballTournament");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -22,6 +26,10 @@ module.exports = function (app) {
   app.use("/api/poster", Poster);
   app.use("/api/politicianInfo", PoliticianInfo);
   app.use("/api/politicianProj", politicianProj);
-  // app.use("/api/country", countryNames);
+  app.use("/api/country", countryNames);
+  app.use("/api/city", cityNames);
+  app.use("/api/year", yearList);
+  app.use("/api/cricket", cricketTournament);
+  app.use("/api/football", footballTournament);
   app.use(error);
 };

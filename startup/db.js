@@ -3,7 +3,7 @@ const winston = require("winston");
 
 module.exports = function () {
   mongoose
-    .connect(process.env.DB_COMPASS_STRING, {
+    .connect(process.env.DB_CONNECTION_STRING, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
