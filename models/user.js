@@ -62,6 +62,9 @@ const userSchema = new mongoose.Schema({
   ActorEducation: {
     type: Array,
   },
+  PoliticianEducation: {
+    type: Array,
+  },
   Gallery: {
     type: Array,
   },
@@ -154,6 +157,7 @@ const schemaForUpdate = Joi.object({
   Twitter: Joi.string(),
   Youtube: Joi.string(),
   ActorEducation: Joi.array(),
+  PoliticianEducation: Joi.array(),
   Gallery: Joi.array(),
   EyeColor: Joi.string(),
   HairColor: Joi.string(),

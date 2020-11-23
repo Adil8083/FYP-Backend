@@ -23,7 +23,6 @@ router.get("/get", async (req, res) => {
   let user = await User.findOne({ email: req.query.email });
 
   let a = await User.findById(user._id).populate("politicianProj");
-  console.log(a.politicianProj);
   res.send(a.politicianProj);
 });
 

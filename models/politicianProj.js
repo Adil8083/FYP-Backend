@@ -10,10 +10,6 @@ const politicianSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  year: {
-    type: String,
-    required: true,
-  },
   detail: {
     type: String,
     required: true,
@@ -24,7 +20,6 @@ const politician = mongoose.model("PoliticianProj", politicianSchema);
 const validation = Joi.object({
   identifier: Joi.string().required(),
   name: Joi.string().required(),
-  year: Joi.string().required(),
   detail: Joi.string().required(),
 });
 

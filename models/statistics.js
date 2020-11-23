@@ -14,11 +14,11 @@ const statisticsSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  average_matches: {
+  total_matches: {
     type: String,
     required: true,
   },
-  total_wickets: {
+  average_wickets: {
     type: String,
     required: false,
   },
