@@ -14,6 +14,9 @@ const cityNames = require("../routes/cityNames");
 const yearList = require("../routes/yearList");
 const cricketTournament = require("../routes/cricketTournament");
 const footballTournament = require("../routes/footballTournament");
+const movieCategory = require("../routes/movieCategory");
+const actorEyeColor = require("../routes/actorEyeColor");
+const actorHairColor = require("../routes/actorHairColor");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -31,5 +34,8 @@ module.exports = function (app) {
   app.use("/api/year", yearList);
   app.use("/api/cricket", cricketTournament);
   app.use("/api/football", footballTournament);
+  app.use("/api/category", movieCategory);
+  app.use("/api/eyecolor", actorEyeColor);
+  app.use("/api/haircolor", actorHairColor);
   app.use(error);
 };
