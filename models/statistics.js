@@ -37,11 +37,11 @@ const statistic = mongoose.model("Statistic", statisticsSchema);
 const schema = Joi.object({
   identifier: Joi.string().required(),
   tournament: Joi.string().required(),
-  club: Joi.string().min(5).max(255),
-  total_matches: Joi.string().min(1).required(),
-  total_goals: Joi.string().min(1),
-  average_score: Joi.string().min(1),
-  average_wickets: Joi.string().min(1),
+  club: Joi.string(),
+  total_matches: Joi.string().required(),
+  total_goals: Joi.string(),
+  average_score: Joi.string(),
+  average_wickets: Joi.string(),
 });
 
 module.exports.Statistic = statistic;
