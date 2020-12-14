@@ -67,6 +67,35 @@ router.get("/get", async (req, res) => {
   let user = await User.findOne({
     email: req.query.email,
   });
+  let populatedValues = [];
+  if (user.politicianInfo.length > 0) {
+    populatedValues = await User.findById(user._id).populate("politicianInfo");
+    user.politicianInfo = populatedValues.politicianInfo;
+  }
+  if (user.politicianProj.length > 0) {
+    populatedValues = await User.findById(user._id).populate("politicianProj");
+    user.politicianProj = populatedValues.politicianProj;
+  }
+  if (user.poster.length > 0) {
+    populatedValues = await User.findById(user._id).populate("poster");
+    user.poster = populatedValues.poster;
+  }
+  if (user.achievements.length > 0) {
+    populatedValues = await User.findById(user._id).populate("achievements");
+    user.achievements = populatedValues.achievements;
+  }
+  if (user.sportInfo.length > 0) {
+    populatedValues = await User.findById(user._id).populate("sportInfo");
+    user.sportInfo = populatedValues.sportInfo;
+  }
+  if (user.concert.length > 0) {
+    populatedValues = await User.findById(user._id).populate("concert");
+    user.concert = populatedValues.concert;
+  }
+  if (user.statistics.length > 0) {
+    populatedValues = await User.findById(user._id).populate("statistics");
+    user.statistics = populatedValues.statistics;
+  }
   res.send(user);
 });
 
