@@ -17,6 +17,7 @@ const footballTournament = require("../routes/footballTournament");
 const movieCategory = require("../routes/movieCategory");
 const actorEyeColor = require("../routes/actorEyeColor");
 const actorHairColor = require("../routes/actorHairColor");
+const profile = require("../routes/profile");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -37,5 +38,6 @@ module.exports = function (app) {
   app.use("/api/category", movieCategory);
   app.use("/api/eyecolor", actorEyeColor);
   app.use("/api/haircolor", actorHairColor);
+  app.use("/api/users", profile);
   app.use(error);
 };
