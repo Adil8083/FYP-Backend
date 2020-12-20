@@ -18,7 +18,7 @@ const bucket = image.bucket("usergallery");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "E:/FYP-WORK/FYP-BACKEND/Gallery");
+    cb(null, "./Gallery");
   },
   filename: function (req, file, cb) {
     cb(null, req.query.email + "-gallery-" + req.query.count + "-.png");
@@ -36,11 +36,7 @@ const { User, validation, UpdateValidation } = require("../models/user");
 
 router.post("/gallery", upload.single("Image"), async (req, res) => {
   const file =
-    "E:/FYP-WORK/FYP-BACKEND/Gallery/" +
-    req.query.email +
-    "-gallery-" +
-    req.query.count +
-    "-.png";
+    "./Gallery/" + req.query.email + "-gallery-" + req.query.count + "-.png";
   async function uploadFile() {
     // Uploads a local file to the bucket
     await bucket.upload(file, {
