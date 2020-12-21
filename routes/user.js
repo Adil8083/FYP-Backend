@@ -135,6 +135,7 @@ router.get("/get", async (req, res) => {
   let user = await User.findOne({
     email: req.query.email,
   });
+  user = await User.findById(user._id).select("-password -AppIcon");
   let populatedValues = [];
   if (user.politicianInfo.length > 0) {
     populatedValues = await User.findById(user._id).populate("politicianInfo");
@@ -163,6 +164,10 @@ router.get("/get", async (req, res) => {
   if (user.statistics.length > 0) {
     populatedValues = await User.findById(user._id).populate("statistics");
     user.statistics = populatedValues.statistics;
+  }
+  if (user.FanPost.length > 0) {
+    populatedValues = await User.findById(user._id).populate("FanPost");
+    user.FanPost = populatedValues.FanPost;
   }
   res.send(user);
 });
