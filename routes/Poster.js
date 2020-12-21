@@ -18,7 +18,7 @@ var multer = require("multer");
 const { route } = require("./auth.js");
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "E:/FYP-WORK/FYP-BACKEND/assets");
+    cb(null, "./assets");
   },
   filename: function (req, file, cb) {
     cb(null, req.query.email + "-poster" + "-" + req.body.name + ".png");
@@ -34,11 +34,7 @@ var upload = multer({
 
 router.post("/uploadImage", upload.single("Image"), async (req, res) => {
   const file =
-    "E:/FYP-WORK/FYP-BACKEND/assets/" +
-    req.query.email +
-    "-poster-" +
-    req.body.name +
-    ".png";
+    "./assets/" + req.query.email + "-poster-" + req.body.name + ".png";
   async function uploadFile() {
     // Uploads a local file to the bucket
     await bucket.upload(file, {

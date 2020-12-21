@@ -18,7 +18,7 @@ const bucket = image.bucket("celebprofile");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "E:/FYP-WORK/FYP-BACKEND/profile");
+    cb(null, "./profile");
   },
   filename: function (req, file, cb) {
     cb(null, req.query.email + "-profile-.png");
@@ -35,8 +35,7 @@ var upload = multer({
 const { User, validation, UpdateValidation } = require("../models/user");
 
 router.post("/profile", upload.single("Image"), async (req, res) => {
-  const file =
-    "E:/FYP-WORK/FYP-BACKEND/profile/" + req.query.email + "-profile-.png";
+  const file = "./profile/" + req.query.email + "-profile-.png";
   async function uploadFile() {
     // Uploads a local file to the bucket
     await bucket.upload(file, {

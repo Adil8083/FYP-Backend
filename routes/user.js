@@ -18,7 +18,7 @@ const bucket = image.bucket("usergallery");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "E:/FYP-WORK/FYP-BACKEND/Gallery");
+    cb(null, "./Gallery");
   },
   filename: function (req, file, cb) {
     cb(null, req.query.email + "-gallery-" + req.query.count + "-.png");
@@ -36,11 +36,7 @@ const { User, validation, UpdateValidation } = require("../models/user");
 
 router.post("/gallery", upload.single("Image"), async (req, res) => {
   const file =
-    "E:/FYP-WORK/FYP-BACKEND/Gallery/" +
-    req.query.email +
-    "-gallery-" +
-    req.query.count +
-    "-.png";
+    "./Gallery/" + req.query.email + "-gallery-" + req.query.count + "-.png";
   async function uploadFile() {
     // Uploads a local file to the bucket
     await bucket.upload(file, {
@@ -139,6 +135,7 @@ router.get("/get", async (req, res) => {
   let user = await User.findOne({
     email: req.query.email,
   });
+  user = await User.findById(user._id).select("-password -AppIcon");
   let populatedValues = [];
   if (user.politicianInfo.length > 0) {
     populatedValues = await User.findById(user._id).populate("politicianInfo");
@@ -167,6 +164,10 @@ router.get("/get", async (req, res) => {
   if (user.statistics.length > 0) {
     populatedValues = await User.findById(user._id).populate("statistics");
     user.statistics = populatedValues.statistics;
+  }
+  if (user.FanPost.length > 0) {
+    populatedValues = await User.findById(user._id).populate("FanPost");
+    user.FanPost = populatedValues.FanPost;
   }
   res.send(user);
 });
