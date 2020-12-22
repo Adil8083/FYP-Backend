@@ -6,3 +6,4 @@ startup/logging.js
 /assets/
 /Gallery
 /profile
+.env
