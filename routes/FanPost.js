@@ -66,9 +66,6 @@ router.put("/update", async (req, res) => {
   if (id_to_update.length === 0)
     return res.status(400).send("This Post is not added yet.");
 
-  const { error } = validation.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   await FanPost.findOneAndUpdate({ _id: id_to_update }, req.body);
 
   res.send("Updated Succesfully");
