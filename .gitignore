@@ -5,3 +5,4 @@ startup/db.js
 startup/logging.js
 /assets/
 /Gallery
+/profile

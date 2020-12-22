@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
     { email: req.query.email },
     { $push: { FanPost: f_post._id } }
   );
-
+  console.log(f_post);
   res.send(f_post);
 });
 
