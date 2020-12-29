@@ -26,7 +26,7 @@ router.post("/forget-password", async (req, res) => {
   if (!user) return res.send("User does not exists");
 
   var smtpConfig = {
-    host: "mail.hybridsquares.com",
+    host: process.env.HOST,
     port: 465,
     secure: true,
     auth: {
