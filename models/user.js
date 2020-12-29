@@ -125,6 +125,18 @@ const userSchema = new mongoose.Schema({
       ref: "Statistic",
     },
   ],
+  FanPost: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FanPost",
+    },
+  ],
+  fans: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Fan",
+    },
+  ],
 });
 
 userSchema.methods.genAuthToken = function () {
