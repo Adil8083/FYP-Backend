@@ -135,6 +135,8 @@ router.get("/get", async (req, res) => {
   let user = await User.findOne({
     email: req.query.email,
   });
+  if (!user)
+    return res.status(400).send("User with this mail is not registered.");
   user = await User.findById(user._id).select("-password -AppIcon");
   let populatedValues = [];
   if (user.politicianInfo.length > 0) {
@@ -168,6 +170,10 @@ router.get("/get", async (req, res) => {
   if (user.FanPost.length > 0) {
     populatedValues = await User.findById(user._id).populate("FanPost");
     user.FanPost = populatedValues.FanPost;
+  }
+  if (user.fans.length > 0) {
+    populatedValues = await User.findById(user._id).populate("fans");
+    user.fans = populatedValues.fans;
   }
   res.send(user);
 });
