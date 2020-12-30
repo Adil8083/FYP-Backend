@@ -41,19 +41,39 @@ router.get("/get", auth, (req, res) => {
   res.send(req.user);
 });
 router.post("/login", async (req, res, next) => {
+  let isAdmin = false;
   const { error } = loginValidation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let fan = await Fan.findOne({ email: req.body.email });
-  if (!fan) return res.status(400).send("Email does not exists");
+
+  if (!fan) {
+    let user = await User.findOne({
+      email: req.body.email,
+    });
+    if (!user) return res.status(400).send("Email does not exists");
+    isAdmin = true;
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword) return res.status(400).send("Password is incorrect");
+    const token = jwt.sign(
+      { _id: user._id, email: user.email, name: user.name },
+      process.env.ACCESS_TOKEN
+    );
+    return res.json({ token: token, isAdmin: isAdmin });
+  }
 
   const validPass = await bcrypt.compare(req.body.password, fan.password);
   if (!validPass) return res.status(400).send("Password is incorrect");
+
   const token = jwt.sign(
     { _id: fan._id, email: fan.email, name: fan.name },
     process.env.ACCESS_TOKEN
   );
-  res.header("auth-token", token).send("Logged in");
+
+  res.json({ token: token, isAdmin: isAdmin });
 });
 
 module.exports = router;
