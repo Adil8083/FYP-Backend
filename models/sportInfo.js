@@ -20,8 +20,8 @@ const sportInfo = mongoose.model("Sport Info", sportsSchema);
 
 const schema = Joi.object({
   sport: Joi.string().required(),
-  teamName: Joi.string().min(5).max(255).required(),
-  position_in_team: Joi.string().min(5).max(255).required(),
+  teamName: Joi.string().required(),
+  position_in_team: Joi.string().required(),
 });
 
 module.exports.SportInfo = sportInfo;
