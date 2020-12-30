@@ -19,10 +19,10 @@ router.post("/signup", async (req, res, next) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let fan = await Fan.findOne({ email: req.body.email });
-  if (fan) return res.status(400).send("Fan already registered with this mail");
+  if (fan) return res.status(400).send("this email is already registered");
 
   fan = await Fan.findOne({ name: req.body.name });
-  if (fan) return res.status(400).send("Fan already registered with this name");
+  if (fan) return res.status(400).send("this username is already registered");
 
   fan = new Fan(req.body);
   const salt = await bcrypt.genSalt(10);
@@ -65,7 +65,6 @@ router.post("/login", async (req, res, next) => {
     if (fan.length <= 0) {
       return res.status(400).send("Email does not exists");
     }
-
     const validPass = await bcrypt.compare(req.body.password, fan[0].password);
     if (!validPass) return res.status(400).send("Password is incorrect");
     const token = jwt.sign(
