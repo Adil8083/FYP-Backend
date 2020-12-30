@@ -19,10 +19,10 @@ router.post("/signup", async (req, res, next) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let fan = await Fan.findOne({ email: req.body.email });
-  if (fan) return res.status(400).send("Fan already registered with this mail");
+  if (fan) return res.status(400).send("this email is already registered");
 
   fan = await Fan.findOne({ name: req.body.name });
-  if (fan) return res.status(400).send("Fan already registered with this name");
+  if (fan) return res.status(400).send("this username is already registered");
 
   fan = new Fan(req.body);
   const salt = await bcrypt.genSalt(10);
@@ -53,7 +53,7 @@ router.post("/login", async (req, res, next) => {
     { _id: fan._id, email: fan.email, name: fan.name },
     process.env.ACCESS_TOKEN
   );
-  res.header("auth-token", token).send("Logged in");
+  res.header("auth-token", token).send(token);
 });
 
 module.exports = router;
