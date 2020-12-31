@@ -119,6 +119,20 @@ router.put("/update", async (req, res) => {
   }
 });
 
+router.put("/update-password", async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
+
+  const response = await User.findOneAndUpdate(
+    { email: req.body.email },
+    { password: password }
+  );
+
+  if (!response) return res.status(400).send("Could update password");
+
+  res.send("Password successfuly updated!");
+});
+
 router.delete("/delete", async (req, res) => {
   let user = await User.findOne({
     email: req.query.email,
