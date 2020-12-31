@@ -2,10 +2,6 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  identifier: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -26,7 +22,6 @@ const schema = new mongoose.Schema({
 
 const Fan = mongoose.model("Fan", schema);
 const validation = Joi.object({
-  identifier: Joi.string().required(),
   name: Joi.string().required(),
   email: Joi.string().required().email(),
   password: Joi.string().min(5).max(1024).required(),

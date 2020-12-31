@@ -22,6 +22,9 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isLike: {
+    type: Array,
+  },
 });
 
 const FanPost = mongoose.model("FanPost", PostSchema);
@@ -32,6 +35,7 @@ const schema = Joi.object({
   description: Joi.string().required(),
   LikeCount: Joi.string().required(),
   date: Joi.string().required(),
+  isLike: Joi.array(),
 });
 
 exports.FanPost = FanPost;
