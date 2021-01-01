@@ -125,6 +125,12 @@ const userSchema = new mongoose.Schema({
       ref: "Statistic",
     },
   ],
+  Posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CelebPost",
+    },
+  ],
   FanPost: [
     {
       type: mongoose.Schema.Types.ObjectId,
