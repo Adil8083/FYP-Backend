@@ -3,6 +3,7 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 var multer = require("multer");
+
 const { Storage } = require("@google-cloud/storage");
 const path = require("path");
 
@@ -122,13 +123,10 @@ router.put("/update", async (req, res) => {
 router.put("/update-password", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
+  const user = await User.findOne({ email: req.body.email });
 
-  const response = await User.findOneAndUpdate(
-    { email: req.body.email },
-    { password: password }
-  );
-
-  if (!response) return res.status(400).send("Could update password");
+  user.password = password;
+  await user.save();
 
   res.send("Password successfuly updated!");
 });
