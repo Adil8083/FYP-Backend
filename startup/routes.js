@@ -20,6 +20,7 @@ const actorHairColor = require("../routes/actorHairColor");
 const profile = require("../routes/profile");
 const FanPost = require("../routes/FanPost");
 const fan = require("../routes/fan");
+const celebPost = require("../routes/celebPost");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -43,5 +44,6 @@ module.exports = function (app) {
   app.use("/api/users", profile);
   app.use("/api/fanPost", FanPost);
   app.use("/api/fan", fan);
+  app.use("/api/celebPost", celebPost);
   app.use(error);
 };
