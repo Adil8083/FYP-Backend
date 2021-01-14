@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node Start.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^5.7.0",
@@ -29,5 +29,7 @@
   },
   "devDependencies": {
     "debug": "^4.3.1"
-  }
+  },
+  "engines" : { "node" : "12.18.3" },
+  "engineStrict" : true
 }

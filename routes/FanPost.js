@@ -35,7 +35,7 @@ router.get("/getUserPosts", async (req, res) => {
     return res.status(400).send("User with this mail is not registered.");
   user = await User.findById(user._id).populate("FanPost");
   let f_post = user.FanPost;
-  f_post = f_post.filter((obj) => obj.name === req.body.name);
+  f_post = f_post.filter((obj) => obj.name === req.query.name);
   res.send(f_post);
 });
 
