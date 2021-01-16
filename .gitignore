@@ -1,8 +1,8 @@
 /node_modules
 package-lock.json
 yarn.lock
-startup/db.js
-startup/logging.js
+# startup/db.js
+# startup/logging.js
 # /assets/
 # /Gallery
 # /profile
