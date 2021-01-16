@@ -3,7 +3,7 @@ package-lock.json
 yarn.lock
 startup/db.js
 startup/logging.js
-/assets/
-/Gallery
-/profile
+# /assets/
+# /Gallery
+# /profile
 .env
