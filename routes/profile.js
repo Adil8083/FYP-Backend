@@ -35,7 +35,7 @@ var upload = multer({
 const { User, validation, UpdateValidation } = require("../models/user");
 
 router.post("/profile", upload.single("Image"), async (req, res) => {
-  const file = "./profile/" + req.query.email + "-profile-.png";
+  const file = "FYP-Backend/profile/" + req.query.email + "-profile-.png";
   async function uploadFile() {
     // Uploads a local file to the bucket
     await bucket.upload(file, {
