@@ -2,10 +2,6 @@ const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const politicianSchema = new mongoose.Schema({
-  country: {
-    type: String,
-    required: true,
-  },
   district: {
     type: String,
     required: true,
@@ -26,7 +22,6 @@ const politicianSchema = new mongoose.Schema({
 
 const politician = mongoose.model("PoliticianInfo", politicianSchema);
 const validation = Joi.object({
-  country: Joi.string().required(),
   district: Joi.string().required(),
   area: Joi.string().required(),
   party: Joi.string().required(),

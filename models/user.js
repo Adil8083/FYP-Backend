@@ -83,6 +83,10 @@ const userSchema = new mongoose.Schema({
   hobbies: {
     type: Array,
   },
+
+  appGenerated: {
+    type: Boolean,
+  },
   politicianInfo: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -176,6 +180,7 @@ const schemaForUpdate = Joi.object({
   Facebook: Joi.string(),
   Insta: Joi.string(),
   Twitter: Joi.string(),
+  appGenerated: Joi.boolean(),
   Youtube: Joi.string(),
   ActorEducation: Joi.array(),
   PoliticianEducation: Joi.array(),
