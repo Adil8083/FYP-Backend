@@ -18,13 +18,8 @@ router.post("/signup", async (req, res, next) => {
   const { error } = validation.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let fan = await User.findById(user._id).populate("fans");
-  fan = fan.fans;
-  fan = fan.filter((obj) => obj.email === req.body.email);
-  const check = fan.length > 0;
-  if (check) {
-    return res.status(400).send("this email is already registered");
-  }
+  let fan = await Fan.findOne({ email: req.body.email });
+  if (fan) return res.status(400).send("this email is already registered");
 
   fan = await Fan.findOne({ name: req.body.name });
   if (fan) return res.status(400).send("this username is already registered");
@@ -33,7 +28,7 @@ router.post("/signup", async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   fan.password = await bcrypt.hash(fan.password, salt);
 
-  fan.save();
+  await fan.save();
 
   await User.findOneAndUpdate(
     { email: req.query.email },
